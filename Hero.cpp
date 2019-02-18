@@ -383,6 +383,7 @@ bool Hero::aliveOrDead()
 }
 int Hero::meleeRoll()
 {	
+	Crit = false;
 	srand( time(0));
 	Dice dice1d20(1,20);
 	int roll = dice1d20.getValue();
@@ -394,9 +395,13 @@ int Hero::meleeRoll()
 int weaponPos = inventory.myEquip.getHandPosition();
 		if(weaponPos > -1)
 			{
-			cout <<"Using weapon :"<< inventory.weapons[weaponPos].Item::getName() << endl;
+			cout <<"Using weapon: "<< inventory.weapons[weaponPos].Item::getName() << endl;
 			mincrit = inventory.weapons[weaponPos].getminCrit();
-		}
+			}
+		else
+			{
+			cout <<"Using weapon: NONE"<<endl;
+			}
 	if(roll>=mincrit)  //is this here in attack or in damage rolls? here I think
 		{
 		Crit = true;
@@ -404,7 +409,7 @@ int weaponPos = inventory.myEquip.getHandPosition();
 		}
 		
 		cout << "  Melee hit roll of "<<roll << " plus base Atk bonus "<<Atk<<" + "<<getMod(STR)<<" STR mod + "<<Race::getsizeMod()<<" size mod"<<endl;
-	cout << "Total melee hit roll of "<<atkroll;
+	cout << "Total melee hit roll of "<<atkroll<<endl;
 	return atkroll;
 }
 int Hero::rangeRoll()
@@ -462,6 +467,7 @@ if(hasHand)
 		else
 			{
 				temp+="unarmed is ";
+				range = 0;
 				Dmg = 3;	//unarmed damage 1d3 for m, 1d2 for s
 			if(Race::getSize() == 's')
 				Dmg = 2;
@@ -484,7 +490,7 @@ bool has2Hand = inventory.myEquip.has2Hand();
 bool range = inventory.myEquip.hasRange();
 int weaponPos = inventory.myEquip.getHandPosition();
 int weapon2handPos = inventory.myEquip.get2HandPosition();
-int roll;  //damage roll result
+int roll = 0;  //damage roll result
 	if(hasHand)
 		{
 	mult = inventory.weapons[weaponPos].getDieMultiple();
@@ -495,8 +501,10 @@ int roll;  //damage roll result
 	Dice dice(mult,Dmg);
 	if(!range)  //melee damage includes str mod
 	{
-	roll = dice.getValue() + getMod(STR);
-	cout <<"Damage roll of "<<dice.getValue()<<" + Str Mod of "<<getMod(STR)<<endl;
+	roll = dice.getValue();
+	cout <<"Damage roll of "<<roll<<" + Str Mod of "<<getMod(STR)<<endl;
+	roll = roll + getMod(STR);
+cout <<"For damage of "<<roll<<endl;
 		if(has2Hand)
 		{
 			if(weaponPos == weapon2handPos)

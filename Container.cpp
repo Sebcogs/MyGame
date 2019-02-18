@@ -79,6 +79,7 @@ int Container::unlock()
 }
 Item Container::takeItem()
 {
+	const string MSG = "input error";
 	Item thing;
 	int input;
 	int max = bag.items.size();
@@ -86,6 +87,10 @@ if(max >1)
 	{
 	cout <<"Which item to take? 1 to "<<max;
 	cin>>input;
+		if(input<1)
+			throw(MSG);
+		if(input>max)
+			throw(MSG);
 	}
 else if(max == 1)
 	input =1;
@@ -100,6 +105,7 @@ else if(max == 1)
 }
 Potion Container::takePotion()
 {
+	const string MSG = "input error";
 	Potion thing;
 	int input;
 	int max = bag.potions.size();
@@ -107,6 +113,10 @@ if(max >1)
 	{
 	cout <<"Which item to take? 1 to "<<max;
 	cin>>input;
+	if(input<1)
+			throw(MSG);
+		if(input>max)
+			throw(MSG);
 	}
 else if(max == 1)
 	input =1;

@@ -55,5 +55,6 @@ class Room
 		void setEncounter(int level); //overloaded for random
 		void setEncounter(int ID, int number, int reward, string position = "center"); //overloaded for defined
 		bool getHasEncounter();
+		void lookLoot();
 };
 #endif

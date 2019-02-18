@@ -6,7 +6,8 @@
 //#include<map>
 #include <math.h>
 #include "RoomDisplay.h"
-
+#include "Dice.h"
+#include <unistd.h>
 using namespace std;
 
 
@@ -59,6 +60,7 @@ RoomDisplay::RoomDisplay(Room current, int heroNumber)
 
 	if(aRoom.getHasLoot())
 		grid[xMAX/2][yMAX/2] = 'C';
+
 	if(aRoom.getHasEncounter())
 		{
 		monsters = aRoom.enemies.getNumberAppear();
@@ -171,13 +173,19 @@ void RoomDisplay::updateRoom(Room current)
 	if(aRoom.getHasLoot())
 		grid[xMAX/2][yMAX/2] = 'C';
 
-	if(aRoom.getHasEncounter() && !aRoom.enemies.isDefeated())
+	if(aRoom.getHasEncounter()) // && !aRoom.enemies.isDefeated())
 		{
 	//	monsters = aRoom.enemies.getNumberAppear();
 	//	string location = aRoom.enemies.getLocation();
 	//	setMonsterPosition(location);
 	for(int unsigned x=0; x< xMonster.size(); x++)
-		grid[xMonster[x]][yMonster[x]] = 'M';
+			{
+			bool alive = aRoom.enemies.getMonster(x).aliveOrDead();
+			if(alive)
+			grid[xMonster[x]][yMonster[x]] = 'M';
+			if(!alive)
+			grid[xMonster[x]][yMonster[x]] = 'c';
+			}
 		}
 }
 void RoomDisplay::setPlayerPosition(string entrance)
@@ -253,7 +261,7 @@ void RoomDisplay::setMonsterPosition(string entrance)
 	grid[xMonster[0]][yMonster[0]] = 'M';
 	// cout <<"Monster position set!"<<endl;
 }		
-int RoomDisplay::getDistance(int player, int monster)
+double RoomDisplay::getDistance(int player, int monster)
 {
 	int xdif, ydif;
 	// cout <<"player x position "<<xPlayer[player]<<endl;
@@ -268,3 +276,159 @@ int RoomDisplay::getDistance(int player, int monster)
 	
 	return result;
 } 
+void RoomDisplay::moveMonster(int monster) //, int seed)
+{
+	//move the monster of vector[monster] towards closest hero with a small chance of random movement.
+	//What happens to a monster or hero in the vector when it is dead??
+	bool alive = aRoom.enemies.getMonster(monster).aliveOrDead();
+		int STEPS = aRoom.enemies.getMonster(monster).getSpeed();
+
+	usleep(30000);
+	if(alive)
+	{
+	//	cout <<"Monster is going to move"<<endl;
+		for(int x=0; x<STEPS; x++)	
+		{
+	int closest = -1;
+	double distance = 100;
+	double newclosest;
+		for(unsigned int x=0; x < xPlayer.size(); x++)
+			{
+	//	cout <<"Check " << x <<"th player proximity"<<endl;
+		newclosest = getDistance(x, monster);
+			if(newclosest < distance)
+				{
+			distance = newclosest;
+			closest = x;
+				}
+			}	
+
+	Dice randomMove(1,100);
+		//	cout <<"Player number "<< closest <<" is the closest at a distance of "<<distance<<endl;
+		//	cout <<"Theres a total of "<<players <<" characters and "<<monsters <<" monsters"<<endl;
+		if(distance !=1)
+			{
+		int xdif = xPlayer[closest] - xMonster[monster];
+		int ydif = yPlayer[closest] - yMonster[monster];
+		grid[xMonster[monster]][yMonster[monster]] = ' ';
+
+	int diceRoll = randomMove.getValue();
+	//	cout <<"dice roll of "<< diceRoll<<endl;
+			if(diceRoll <= RANDOMMOVE )		//move randomly if roll is >85
+				{
+				if(xdif != 0)
+					{
+			//	cout <<"the xdif is not 0 so will move in this direction first"<<endl;
+					if(xdif > 0 && xMonster[monster] != xMAX-2 )
+						{
+					xMonster[monster]++;
+				//	cout <<"xMonster ++ updated"<<endl;
+						}
+					else if(xdif < 0 && xMonster[monster] != 1)
+						{
+					xMonster[monster]--;
+				//	cout <<"xMonster -- updated"<<endl;
+						}
+					else
+					cout <<"Error, monster can't move in xdirection"<<endl;
+					}
+				else if(ydif != 0)
+					{
+		//	cout <<"the ydif is not 0 so will move in this direction first"<<endl;
+					if(ydif > 0 && yMonster[monster] != yMAX-2 )
+						{
+					yMonster[monster]++;
+				//	cout <<"yMonster ++ updated"<<endl;
+						}
+					else if(ydif < 0 && yMonster[monster] != 1)
+						{
+					yMonster[monster]--;
+				//	cout <<"yMonster -- updated"<<endl;
+						}
+					else
+					cout <<"Error, monster can't move in ydirection"<<endl;
+					}	
+			else
+				cout <<"Something wrong with monster movement"<<endl;
+				}
+		else if(diceRoll > RANDOMMOVE )
+				{
+//			srand( time(0) + seed);
+		usleep(30000);
+		Dice randomPlace(1,4);
+		int diceRoll2 = randomPlace.getValue();
+		//	cout <<"   diceRoll2 : "<<diceRoll2<<endl;
+			if(diceRoll2 == 1 && xMonster[monster] != xMAX-2)
+				xMonster[monster]++;
+			else if(diceRoll2 == 2 && xMonster[monster] != 1)
+				xMonster[monster]--;
+			else if(diceRoll2 == 3 && yMonster[monster] != yMAX-2)
+				yMonster[monster]++;
+			else if(diceRoll2== 4 && yMonster[monster] != 1)
+				yMonster[monster]--;
+			else
+				cout <<"Something wrong with random movement. Roll was: "<<diceRoll2<<endl;
+				}		//else if(diceRoll >...
+			}				//if(distance !=1)...
+//	else if (distance == 1)
+	//	cout <<"The monster is next to the closest hero and will not move."<<endl;
+
+
+		}	//Steps
+	}	//if(alive)
+	else if(!alive)
+	{
+		grid[xMonster[monster]][yMonster[monster]] = 'c';
+		cout <<"That monster # "<<monster<<" is dead."<<endl;
+	}
+	else
+		cout <<"Roomdisplay can't determine if monster is alive or not"<<endl;
+		//	cout<<"update grid with monster position"<<endl;		
+	for(int unsigned x=0; x< xMonster.size(); x++)
+		{
+		bool alive = aRoom.enemies.getMonster(x).aliveOrDead();
+		if(alive)
+			grid[xMonster[x]][yMonster[x]] = 'M';
+		else if(!alive)
+			grid[xMonster[x]][yMonster[x]] = 'c';
+		else
+			cout <<"in move, can't determine alive or dead status"<<endl;
+		}
+}
+string RoomDisplay::getTarget(int monster)
+{
+	bool alive = aRoom.enemies.getMonster(monster).aliveOrDead();
+	string aliveordead;
+	if(alive)
+		aliveordead = "alive";
+	else
+		aliveordead = "dead";
+
+	string output;
+	output = "Monster #" + to_string(monster) + " is " + aliveordead +" at (" + to_string(xMonster[monster]) + ", " + to_string(yMonster[monster]) + ")";
+	return output;
+}
+void RoomDisplay::getTarget()
+{
+	string output;
+	for(unsigned int monster=0; monster<xMonster.size(); monster++)
+	{
+	bool alive = aRoom.enemies.getMonster(monster).aliveOrDead();
+	if(alive)
+		cout<<getTarget(monster)<<endl;
+	//output = output + getTarget(monster) + "\n";
+	}
+	//cout<<output;
+}
+int RoomDisplay::heroTarget(int monster)
+{	//looks for a hero in an adjacent position for melee attack
+	int nextto = -1;
+	for(int hero=0; hero< players; hero++)
+		{ 	
+	double distance = getDistance(hero, monster);
+		if(distance == 1)
+			nextto = hero;
+		}
+			//returns the player index number or -1 if not adjacent
+	return nextto;
+}

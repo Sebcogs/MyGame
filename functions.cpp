@@ -60,14 +60,8 @@ bool processCommand(Party& party, Hero champ[], Parser& parser, GameMap& gameroo
 		 gamerooms.displayEntrance();
 		cout<<"You look around and see: "<<endl;
 		gamerooms.getCurrentRoom().display();
-	//if has loot, open container and look. later make this a separate operation
-		if(gamerooms.getCurrentRoom().getHasLoot())
-			{
-			for(unsigned int i=0; i<gamerooms.getCurrentRoom().chest.size(); i++)
-				gamerooms.getCurrentRoom().chest[i].open();
-		
-			}
-		
+			//if has loot, open container and look. later make this a separate operation
+		gamerooms.getCurrentRoom().lookLoot();
 		//delete thisRoom;
 		}
 	break;
@@ -83,7 +77,16 @@ bool processCommand(Party& party, Hero champ[], Parser& parser, GameMap& gameroo
 			cout <<"Show character info "<<endl;
 		if(!myCommand.hasSecondWord())
 			{
+			try{
 	heroNumber = party.whichPartyMember();
+			}
+			catch(string msg)
+				{
+				cout <<"An exception was thrown"<<endl;
+				cout <<msg<<endl;
+				cout <<"Use hero number 1"<<endl;
+				heroNumber = 1;
+				}
 	name = party.getHero(heroNumber);
 			}
 		else
@@ -111,7 +114,16 @@ bool processCommand(Party& party, Hero champ[], Parser& parser, GameMap& gameroo
 		cout <<"Equip character "<<endl;
 		if(!myCommand.hasSecondWord())
 			{
+			try{
 	heroNumber = party.whichPartyMember();
+			}
+			catch(string msg)
+				{
+				cout <<"An exception was thrown"<<endl;
+				cout <<msg<<endl;
+				cout <<"Use hero number 1"<<endl;
+				heroNumber = 1;
+				}
 	name = party.getHero(heroNumber);
 			}
 		else
@@ -138,7 +150,16 @@ bool processCommand(Party& party, Hero champ[], Parser& parser, GameMap& gameroo
 		cout <<"Unequip Character "<<endl;
 		if(!myCommand.hasSecondWord())
 			{
+			try{
 		heroNumber = party.whichPartyMember();
+			}
+			catch(string msg)
+				{
+				cout <<"An exception was thrown"<<endl;
+				cout <<msg<<endl;
+				cout <<"Use hero number 1"<<endl;
+				heroNumber = 1;
+				}
 		name = party.getHero(heroNumber);
 			}
 		else
@@ -169,11 +190,20 @@ bool processCommand(Party& party, Hero champ[], Parser& parser, GameMap& gameroo
 		{
 		cout <<" That command was unknown.  Your choices are:"<<endl;
 		parser.showCommands();
+		cout <<"Press any button to continue."<<endl;
+	cin.ignore(100, '\n');
 		}
 	break;
 	case MARCH :
 			{
+	try{
 			party.setMarchingOrder();
+	}
+	catch(string msg)
+	{
+	cout <<"An exception was thrown"<<endl;
+	cout <<msg<<endl;
+	}
 			cin.ignore(100, '\n');
 			}
 	break;
@@ -197,14 +227,23 @@ bool processCommand(Party& party, Hero champ[], Parser& parser, GameMap& gameroo
 		cout <<"Enter desired #: ";
 
 		cin>>choice;	
+
 		}
 	else if(currentRoom.chest.size() == 1)
 			choice = 0;
 		
 	if(choice <= 0 || choice < currentRoom.chest.size())
 		{		
-
+			try{
 			heroNumber = party.whichPartyMember();
+				}
+			catch(string msg)
+				{
+				cout <<"An exception was thrown"<<endl;
+				cout <<msg<<endl;
+				cout <<"Use hero number 1"<<endl;
+				heroNumber = 1;
+				}
 			string name = party.getHero(heroNumber);
 
 			for(int i=0; i<numberofHeros; i++)
@@ -236,15 +275,29 @@ bool processCommand(Party& party, Hero champ[], Parser& parser, GameMap& gameroo
 			cout <<" *** So far only removed items or potions, anything else hasn't been implemented yet *** "<<endl;
 						if(currentRoom.chest[choice].bag.items.size()>0)
 						{
+	try{
 				Item thing = currentRoom.chest[choice].takeItem();
 				cout <<"Remove 1st item in container: "<< thing.getName() <<endl;
 				champ[i].inventory.addItem(thing);
+		}
+	catch(string msg)
+	{
+	cout <<"An exception was thrown"<<endl;
+	cout <<msg<<endl;
+	}
 						}
 						else if(currentRoom.chest[choice].bag.potions.size()>0)
 						{
+	try{
 				Potion thing = currentRoom.chest[choice].takePotion();
 				cout <<"Remove 1st potion in container: "<< thing.getName() <<endl;
 				champ[i].inventory.addPotion(thing);
+		}
+	catch(string msg)
+	{
+	cout <<"An exception was thrown"<<endl;
+	cout <<msg<<endl;
+	}
 						}
 				champ[i].inventory.showList();
 							}
@@ -292,6 +345,7 @@ Only some normal commands are valid and new special fight commands become valid
 
 bool processFightCommand(Party& party, Hero champ[], Parser& parser, GameMap& gamerooms, Command myCommand, RoomDisplay& thisRoom, int& player)
 {
+	const string MSG = "input error";
 	int numberofHeros = party.getMemberNumber();
 	//string name = party.getHero(player);
 //	int heroNumber;
@@ -308,21 +362,32 @@ bool processFightCommand(Party& party, Hero champ[], Parser& parser, GameMap& ga
 		cout <<" That command was unknown.  Because you are in battle, your choices are:"<<endl;
 		parser.showFightCommands();
 		cout <<"Try again"<<endl;
+		cout <<"Press any button to continue."<<endl;
+	cin.ignore(100, '\n');
 		player--;
 		}
 	break;
 		case ATTACK :
 			{
-			//cout <<"not implemented yet"<<endl;
-		Room currentRoom = gamerooms.getCurrentRoom();
+		//	cout <<"not implemented yet"<<endl;
+	Room currentRoom = gamerooms.getCurrentRoom();
 		int numberOfEnemies = gamerooms.getCurrentRoom().enemies.getNumberAppear();
-		Monster aMonster = currentRoom.enemies.getMonster(0);  //choose monster
-			int monsterNumber = 0;
+int monsterNumber;
+		thisRoom.getTarget();
+		cout <<"Choose target #: ";
+		cin >> monsterNumber;
+	cin.ignore(100, '\n');	
+		if(monsterNumber <0)
+			throw(MSG);
+		if(monsterNumber>numberOfEnemies-1)
+			throw(MSG);
+		Monster aMonster = currentRoom.enemies.getMonster(monsterNumber);  //choose monster
+			
 		while(!aMonster.aliveOrDead() && monsterNumber < numberOfEnemies)  //dead
 		{
-	//	cout <<"Monster # "<<monsterNumber <<" is dead, ";
+		cout <<"Monster # "<<monsterNumber <<" is dead, ";
 		monsterNumber ++;
-	//	cout <<"using monster # "<<monsterNumber<<endl;
+		cout <<"using monster # "<<monsterNumber<<endl;
 		aMonster = gamerooms.getCurrentRoom().enemies.getMonster(monsterNumber);
 		}
 	
@@ -333,7 +398,7 @@ bool processFightCommand(Party& party, Hero champ[], Parser& parser, GameMap& ga
 			{
 			//	cout <<"Monster is alive "<< aMonster.aliveOrDead()<<endl;
 		currentRoom.enemies.updateMonster(aMonster, monsterNumber);
-	/*bool badguys = */	currentRoom.getHasEncounter();
+	//bool badguys = 	currentRoom.getHasEncounter();
 		//	cout<<"In function attack, getHasEncounter: "<<badguys<<", then update room"<<endl;
 		gamerooms.updateRoom(currentRoom);
 		thisRoom.updateRoom(currentRoom);
@@ -341,7 +406,7 @@ bool processFightCommand(Party& party, Hero champ[], Parser& parser, GameMap& ga
 		else 
 			player--;
 
-		// cin.ignore(100, '\n');
+		// 
 			}
 	break;		
 		case MOVE :
@@ -439,8 +504,12 @@ bool processFightCommand(Party& party, Hero champ[], Parser& parser, GameMap& ga
 				
 					Room currentRoom = gamerooms.getCurrentRoom();
 					int numberOfEnemies = gamerooms.getCurrentRoom().enemies.getNumberAppear();
-					Monster aMonster = currentRoom.enemies.getMonster(0);  //choose monster
-					int monsterNumber = 0;
+int monsterNumber = 0;
+		thisRoom.getTarget();
+		cout <<"Choose target #: ";
+		cin >> monsterNumber;
+					Monster aMonster = currentRoom.enemies.getMonster(monsterNumber);  //choose monster
+					
 					while(!aMonster.aliveOrDead() && monsterNumber < numberOfEnemies)  //dead
 						{
 					monsterNumber ++;
@@ -616,7 +685,7 @@ bool fight(Hero& attacker, Monster& defender, int distance)
 			cout <<"You have no ammo to shoot!"<<endl;
 		}
 			else
-			cout <<"you are out of range. Try a different"<<endl;
+			cout <<"you are out of range. Try a different action."<<endl;
 		}
 	if(success)	
 	{
@@ -639,8 +708,12 @@ bool fight(Hero& attacker, Monster& defender, int distance)
 
 bool fight(Monster& attacker, Hero& defender, int distance)
 {
+		bool alive = attacker.aliveOrDead();
+
 		bool success = false;
 	int hitRoll;
+	if(alive)
+{
 	cout <<attacker.getName() << " is attacking "<<defender.getName()<<"."<<endl;
 		if(distance == 1) //also need to check for equipped weapon
 		{
@@ -667,10 +740,16 @@ bool fight(Monster& attacker, Hero& defender, int distance)
 		dmg = attacker.getDmgRoll();
 		cout <<" Damage for "<<dmg<<endl;
 		defender.receiveDamage(dmg);
+		
 		}
 	else
+		{
 		cout <<" Missed "<<endl;
+		
+		}
+	//cin.ignore(100, '\n');
 	}
+}
 	return success;
 }
 /*
@@ -844,10 +923,12 @@ void equip(Hero& champ)
 	char wOrA = 't';
 		int id;
 		const char QUIT = 'q';	
+
 //	cout <<"about to enter while "<<endl;
 while(wOrA != 'q'){
 	//champ.outputShortData();
 	//champ.inventory.showList();
+		bool found = false;
 	cout <<"Do you want to equip weapon 'w' or armor 'a' or '"<<QUIT<<"' to quit? "; 
 	cin >> wOrA;
 		switch (wOrA) {
@@ -860,16 +941,19 @@ while(wOrA != 'q'){
 					{
 					if(id == champ.inventory.getArmorID(i))
 						{
+				found = true;
 				//champ.inventory.armor[i].wield();
 				champ.inventory.equipArmor(i);
 				cout << "New AC is "<<champ.getAC()<<endl;
 				//cout << "Equipped " << champ.inventory.armor[i].Item::getName() <<endl;
 						}
-	
-					else
-				cout << "Can't equip that! Something went wrong "<<endl;
 					} //for
-		
+			if(!found)
+				{
+			cout << "Can't equip that! Something went wrong "<<endl;
+			wOrA = QUIT;
+				}
+					
 				}
 		break;
 		case 'w' : 
@@ -881,13 +965,18 @@ while(wOrA != 'q'){
 			{
 			if(id == champ.inventory.getWeaponID(i))
 				{
+			found = true;
 			//champ.inventory.weapons[i].wield();
 			champ.inventory.equipWeapon(i);
 			//cout << "Equipped " << champ.inventory.weapons[i].Item::getName() <<endl;
 				}
-			//else
-				//cout << "Can't equip that! Something went wrong "<<endl;
 			} //for
+			if(!found)
+				{
+				cout << "Can't equip that! Something went wrong "<<endl;
+				wOrA = QUIT;
+				}
+
 		cout << "New damage is "<<champ.getDmgDie()<<endl;
 		}
 		break;

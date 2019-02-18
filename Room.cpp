@@ -71,7 +71,8 @@ string Room::getShortDescription()
      */
 string Room::getLongDescription()
     {
-        return "You are in " + description + ".\n" + getExitString() + ".\n";
+		string output = "You are in " + description + ".\n" + getExitString() + ".\n";
+        return output;
     }
 
 void Room::display()
@@ -197,6 +198,14 @@ bool Room::getHasEncounter()
 		}
 	//	cout <<"Room::getHasEncounter returns: "<<hasEncounter<<endl; 
 	return hasEncounter;
+}
+void Room::lookLoot()
+{
+	if(getHasLoot())
+			{
+			for(unsigned int i=0; i<chest.size(); i++)
+				chest[i].open();
+			}	
 }
 #endif
 

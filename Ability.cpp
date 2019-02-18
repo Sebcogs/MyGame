@@ -38,7 +38,7 @@ void Ability::setStat(int stat, int value) //Stats stat, int value)
 {
 	statScore[stat] = value;
 }
-
+//This is the main function for assigning random ability scores
 void Ability::setStat(int stat) //Stats stat)  //choose higher of two
 {
     srand( time(0)+stat );
@@ -90,9 +90,11 @@ void Ability::levelUp(int Lvl)
 	if(!(Lvl % 4)) //Ever 4 levels, increase Ability Score
 	{
 	int newStat;// statIndex;
+	outputData();
 	cout << "You can increase an Ability of your choice!"<< endl << "Which would you like to increase by 1? "; // STR, DEX, CON, INT, WIS, or CHA?";
 	//map<string,Stats>::iterator it = stats.begin();
 	// Iterate over the unordered_map using Iterator till end.
+it = stats.begin();
 	while (it != stats.end())
 	{	
 		string word = it->first;  // Accessing KEY from element pointed by it.
@@ -101,10 +103,28 @@ void Ability::levelUp(int Lvl)
 	}
 		cout<<": ";
 	string ability;
-	cin >> ability;
- 
+bool found=false;
+	while(!found)
+	{
+	cin >> ability;	
+
+ 		it = stats.begin();
+		while(it!=stats.end() && !found)	//check input string is correct
+		{
+		string word = it->first;
+		if(word == ability)
+			{
+			found = true;
+			cout <<"ability found"<<endl;
+			}
+		it++;
+		}
+		if(!found)
+			cout <<"Incorrect entry, try again."<<endl;
+	}
+	//cout << "entering ability adjustment phase"<<endl;
 		newStat = getStat(getStats(ability)) + statIncrease;
-		cout<<getStatName(getStats(ability))<<" was = "<< getStat(getStats(ability)) << ", ";
+		cout<<getStatName(getStats(ability))<<" was = "<< getStat(getStats(ability)) << endl;
 		setStat(getStats(ability), newStat);
 
   } 	

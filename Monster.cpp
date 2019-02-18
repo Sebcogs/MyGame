@@ -120,8 +120,12 @@ int Monster::getInit()
 }
 int Monster::getDmgRoll()
 {
+//	  srand( time(0) );
 	Dice dice(DmgMult, DmgDie);
-	return dice.getValue() + DmgAdjust;
+	int damage = dice.getValue() + DmgAdjust;
+	if(damage <1)
+		damage = 1;
+	return damage;
 }
 void Monster::receiveDamage(int dmg)
 {
@@ -151,10 +155,12 @@ void Monster::receiveHealing(int heal)
 }
 int Monster::getAC()
 {
-	return AC;
+	return AC;		//includes size mod etc
 }
 bool Monster::aliveOrDead()
 {
+	if(!Actor::aliveOrDead())
+		setSpeed(1,1);
 	return Actor::aliveOrDead();
 }
 int Monster::sizeMod()
@@ -164,16 +170,18 @@ int Monster::sizeMod()
 		mod = 1;
 	if(size == 'l')
 		mod = -1;
+	if(size == 't')
+		mod = 2;
 	else
 		mod = 0;
 	return mod;
 }
 int Monster::meleeRoll()
 {	
-	srand( time(0));
+//	srand( time(0));
 	Dice dice1d20(1,20);
-	int roll = dice1d20.getValue() + Atk + sizeMod();
-		cout << "  Monster hit roll of "<<roll << " includes base Atk bonus "<<Atk<<" + "<<sizeMod()<<" size mod"<<endl;
+	int roll = dice1d20.getValue() + Atk; // + sizeMod(); Atk includes size mod etc
+		cout << "  Monster hit roll of "<<roll << " includes base Atk bonus "<<Atk-sizeMod()<<" + "<<sizeMod()<<" size mod"<<endl;
 	return roll;
 }
 

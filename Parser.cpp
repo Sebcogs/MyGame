@@ -26,17 +26,26 @@ using namespace std;
      */
 Command Parser::getCommand() 
     {
-        Command myCommand;
+        Command myCommand;    
+		string inputstream;
+cin.clear();
+//string blank;
+//cout<<"left over input: "<<blank<<endl;
+        cout << "	(Enter Command )>: ";   
+cin.sync(); 
+		getline(cin, inputstream); 
+
+		myCommand = getCommand(inputstream);
+
+   return myCommand;
+}
+
+Command Parser::getCommand(string inputstream)
+{
+       Command myCommand;
            string word1 = "";
         string word2 = "";
  		char space = ' ';
-		string inputstream;
-//string blank;
-
-	//cout<<"left over input: "<<blank<<endl;
-
-        cout << "	(Enter Command )>: ";    
-	getline(cin, inputstream); 
 	
 		istringstream iss(inputstream);
 	getline(iss, word1, space);
@@ -56,21 +65,9 @@ Command Parser::getCommand()
 		{//	cout <<"party commmand entered: "<<word1 <<endl;
 	myCommand.setFields(commands.getPartyWord(word1), word2);
 		}
-	else //(!commands.isCommand(word1))
-	{ /*
-	Command myCommand(commands.getCommandWord(word1), word2);
-	return myCommand;	
-	}
-	else
-	{*/
-	//cout<< "Parser getCommand() .isCommand failed.  using myCommand.isUnknown()"<<endl;
-//	Command myCommand(commands.getCommandWord(word1), word2);
-//	myCommand.isUnknown();
-       //return myCommand; 
-	 }
+	
    return myCommand;
 }
-
     /**
      * Print out a list of valid command words.
      */
@@ -94,14 +91,30 @@ void Parser::showFightCommands()
 Command Parser::getFightCommand() 
     {
         Command myCommand;
+
+		string inputstream;
+cin.clear();
+	//showFightCommands();
+        cout << "	(Enter Fight Command )>: ";    
+cin.sync();
+	getline(cin, inputstream); 
+
+	myCommand = getFightCommand(inputstream);
+
+   return myCommand;
+}
+
+Command Parser::getFightCommand(string inputstream) 
+    {
+        Command myCommand;
            string word1 = "";
         string word2 = "";
  		char space = ' ';
-		string inputstream;
+	//	string inputstream;
 
 	//showFightCommands();
-        cout << "	(Enter Fight Command )>: ";    
-	getline(cin, inputstream); 
+   //     cout << "	(Enter Fight Command )>: ";    
+	//getline(cin, inputstream); 
 	
 		istringstream iss(inputstream);
 	getline(iss, word1, space);

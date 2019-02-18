@@ -46,7 +46,8 @@ void Party::displayHeroNames()
 }
 	
 void Party::setMarchingOrder()
-{	
+{
+		const string MSG = "input error";	
 	int choice;
 	cout << "Choose the marching order of heros"<<endl;
 	displayHeroNames();
@@ -56,6 +57,11 @@ void Party::setMarchingOrder()
 		{
 		cout <<i+1<<" position: ";
 		cin >>choice;
+		if(choice<1)
+			throw(MSG);
+		if(choice>memberNumber+1)
+			throw(MSG);
+		
 		marchingOrder.at(i) = oldmarchingorder.at(choice-1);
 		}
 	cout <<"Marching Order set."<<endl;
@@ -86,6 +92,7 @@ int Party::getMemberNumber()
 }
 int Party::whichPartyMember()	
 {
+		const string MSG = "input error";	
 	int numberofHeros = getMemberNumber();
 	int heroNumber;
 	if(numberofHeros == 1)
@@ -93,8 +100,12 @@ int Party::whichPartyMember()
 		else {
 			displayHeroNames();
 			cout <<"Choose the corresponding hero number";
-			cout<<" from 1 to "<<getMemberNumber()<<": ";
+			cout<<" from 1 to "<<numberofHeros<<": ";
 				cin>>heroNumber;
+		if(heroNumber<1)
+			throw(MSG);
+		if(heroNumber>numberofHeros)
+			throw(MSG);
 			}
 	return heroNumber;
 }

@@ -20,6 +20,7 @@
 //#include "Item.h"
 //#include "Weapon.h"
 //#include "Armor.h"
+#include <unistd.h>
 
 using namespace std;
 void createHeros(Hero& champ);
@@ -32,11 +33,12 @@ int testLvlUp(Hero& myHero);
 bool processCommand(Party& party, Hero champ[], Parser& parser, GameMap& gamerooms, Command myCommand, RoomDisplay& thisRoom);
 bool processFightCommand(Party& party, Hero champ[], Parser& parser, GameMap& gamerooms, Command myCommand, RoomDisplay& thisRoom, int& player);
 void goRoom(GameMap& gamerooms, Command command, RoomDisplay thisRoom, int players);
+bool fight(Monster& attacker, Hero& defender, int distance);//new
 
 int main()
 {
     srand( time(0) );
-    
+    const int DELAY = 300000;
 //cout<<"Start by creating some test rooms"<<endl;
 	GameMap gamerooms;
 	Parser parser;
@@ -69,9 +71,18 @@ int main()
 	Party ourParty(heronames, heroNumber);
 		//ourParty.displayHeroNames();
 	if(heroNumber != 1)
+		{
+try{
 		ourParty.setMarchingOrder();
+	}
+	catch(string msg)
+	{
+	cout <<"An exception was thrown"<<endl;
+	cout <<msg<<endl;
+	}
+		}
 	cout <<endl;
-		//testLvlUp(champ);
+		//testLvlUp(champ[0]);
 
 	gamerooms.displayIntro();
 
@@ -84,6 +95,7 @@ int main()
 
 		cout <<"-Perhaps you should make sure you are equipped properly before entering"<<endl;
 	bool finished = false;
+int rounds = 1;
         while (! finished) 
 			{
 			if(gamerooms.getCurrentRoom().getHasEncounter() )
@@ -91,6 +103,7 @@ int main()
 				bool killed = gamerooms.getCurrentRoom().enemies.isDefeated();
  				if(!killed)
 					{
+cout <<"-----Round "<<rounds<<"-----"<<endl;
 			cout <<"You are under Attack!!"<<endl;
 			cout <<"By "<<gamerooms.getCurrentRoom().enemies.getRemaining();
 			cout <<" out of initial total of ";
@@ -98,7 +111,7 @@ int main()
 	//find initiative for party here
 				for(int x=0; x< heroNumber; x++)
 						{ 
-					cout << "What will "<<champ[x].Actor::getName()<<" do?"<<endl;
+					cout << "What will "<<champ[x].getName()<<" do?"<<endl;
 					parser.showFightCommands();
 				
 					Command myCommand = parser.getFightCommand();
@@ -110,17 +123,44 @@ int main()
 						x=heroNumber;
 						
 					if(killed)
-						{
+							{
 					int totalExp = gamerooms.getCurrentRoom().enemies.giveExp();
 					int exp = totalExp/heroNumber;
 						for(int i=0; i< heroNumber; i++)
-							{ 
+								{ 
 							champ[i].setExp(exp);
-							}
+								}
+rounds = 1;
 						//cin.ignore(100, '\n');
-						}
-						}
-					}
+							}	//if(killed)...
+						}	//for hero loop
+
+		//cycle thru the monsters here
+				int numberOfEnemies = gamerooms.getCurrentRoom().enemies.getNumberAppear();
+						if(!finished  && !killed)
+						{	
+						for(int monster=0; monster< numberOfEnemies; monster++)
+							{
+							Monster aMonster = gamerooms.getCurrentRoom().enemies.getMonster(monster);  	
+							bool alive = aMonster.aliveOrDead();
+							thisRoom.moveMonster(monster); //, x);	//monster moves number of steps
+							cout << thisRoom.getTarget(monster)<<endl;		
+							//find closest hero
+							int nextto = thisRoom.heroTarget(monster);
+							//attack that hero
+							usleep(DELAY);
+							bool success;
+							if(nextto != -1 && alive)	
+								{
+								success = fight(aMonster, champ[nextto], 1);
+								if(!success)
+									cout <<"Error in monster fighting hero."<<endl;
+								}
+							}	//for monsters
+						thisRoom.createRoom();
+							rounds++;
+						}	//if(!finished  && !killed)  cycle thru monsters
+					}	//if(!killed)
 				else 
 					cout <<"Enemies defeated!!"<<endl;
 				}
@@ -136,7 +176,7 @@ int main()
      	   }
         cout<<"Thank you for playing.  Good bye."<<endl;
 
-/*
+ /*
 cout<<"Load a monster based on Lvl"<<endl;
 int lvl = champ.getLevel();
 int entry=0;

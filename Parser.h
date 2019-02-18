@@ -24,6 +24,8 @@ class Parser
 		Parser();
 		Command getCommand();	//Command is either normal command or party commands
 		Command getFightCommand();
+		Command getCommand(string);		//overloaded to take input string rather than from cin
+		Command getFightCommand(string);
 		void showCommands();
 		void showNormalCommands();
 		void showPartyCommands();

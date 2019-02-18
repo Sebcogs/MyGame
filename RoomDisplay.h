@@ -16,7 +16,9 @@ using namespace std;
 class RoomDisplay
 {
 	private:
+		
 		Room aRoom;
+	int RANDOMMOVE = 85;		//for random moves
 		int xMAX;
 		int yMAX;
 		int players;
@@ -37,6 +39,11 @@ class RoomDisplay
 		void setPlayerPosition(string entrance);
 		void setMonsterPosition(string entrance);
 		//void updatePlayerPosition();
-		int getDistance(int player, int monster=0);
+		double getDistance(int player, int monster=0);
+		void moveMonster(int monster); //, int seed);
+		string getTarget(int monster);
+		void getTarget();
+		int heroTarget(int monster);
+
 };
 #endif

@@ -1,4 +1,0 @@
-1 Bomb 1 6 1 1 15 A small explosive that causes splash damage to nearby targets.
-2 Alchemist_Fire 1 6 2 1 20 A vial of sticky substance that ignites then exposed to air.
-3 Acid 1 6 1 1 10 A vial of corrosive liquid.
-4 Holy_Water 1 8 1 1 25 A vial of holy water that effects undead and evil creatures.

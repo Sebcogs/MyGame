@@ -1,0 +1,36 @@
+1	Presidigitation	0	0	1	60	2	0	1	2	0	8	BWG	2	3	1	0	o	1	A	simple	trick	to	impress/distract	people.
+2	Acid_Splash	2	0	1	0	5	1	1	2	0	3	W	0	3	1	1	o	1	A	missile	of	acid							
+3	Dancing_Lights	5	0	1	10	20	0	1	2	0	8	BWG	2	3	1	0	o	1	Creates	four	glowing	spheres							
+4	Daze	4	0	1	1	5	0	1	2	3	2048	BW	0	2	0	0	o	1	Daze	a	creature	4HD	or	less					
+5	Detect_Magic	3	0	1	10	30	0	1	2	3	0	BCW	30	3	1	0	d	1	Detects	spells	or	magic	item	within	60ft	(how	to	implement?)	
+6	Flare	5	0	1	10	5	0	1	0	0	2	BW	0	0	0	0	o	1	Dazzles	1	creature.								
+7	Ghost_Sounds	6	0	1	1	5	0	1	2	3	8	BWG	2	3	1	0	o	1	Creates	a	figment	sound	to	frighten	or	distract			
+8	Resistance	1	0	1	10	1	0	1	2	4	8192	BCW	0	3	1	0	d	1	Increase	the	resistance	of	an	ally	(+1	save	throws)		
+9	Cure_Minor_Wounds	2	0	1	0	1	2	1	2	0	1	C	0	2	0.5	1	d	1	Cure	1HP	of	damage							
+10	Guidance	3	0	1	10	1	0	1	2	0	16384	C	0	3	1	0	d	1	Imbues	the	subject	with	a	touch	of	divine	guidance	(+1	atk)
+11	Read_Magic	3	0	1	60	-1	0	1	2	4	0	BCW	0	3	1	0	d	1	Can	read/decipher	magic	text	and	inscriptions					
+12	Speak_w_Animals	3	1	1	10	-1	0	1	2	0	0	GR	0	3	1	0	d	1	You	can	speak	to	animals	(1min/level)					
+13	Ray_of_Frost	5	0	1	0	5	1	1	2	0	3	W	0	3	1	1	o	1	A ray of frost damage										
+14	Bless	4	1	1	10	10	0	1	2	4	24576	C	10	3	1	0	d	1	Fills your allies with courage (+1 atk,saves)										
+15	Burning_Hands	5	1	1	0	3	1	1	2	0	4	CW	3	1	0.5	0	o	1	A cone of flame shoots from your fingers										
+16	Calm_Animal	4	1	1	10	5	0	1	2	0	2048	R	6	3	1	0	o	1	Soothes and quiets animals, rendering them harmless										
+17	Cause_Fear	7	1	1	2	5	0	1	2	0	8	BCW	0	2	0.5	0	o	1	Affected creature becomes frightened										
+18	Charm_Person	4	1	1	600	5	0	1	2	0	2048	BW	0	2	0	0	o	1	Makes humanoid regard you as a friend										
+19	Chill_Touch	7	1	1	0	1	1	1	2	0	6	W	0	3	1	1	o	1	A touch from your hand dirsupts life force of living creatures										
+20	Color_Spray	6	1	1	0	3	0	1	2	3	2049	W	3	2	0	0	o	1	A cone of color from your hand causes stun, blind or unconscious										
+21	Cure_light_Wounds	2	1	1	0	1	2	1	2	0	8	BC	0	3	1	0	d	1	Cures a living creature										
+22	Divine_Favor	5	1	1	10	-1	0	1	2	4	81920	C	0	3	1	0	d	1	Gain +1 on atk and weapon dmg										
+23	Entangle	8	1	1	10	80	0	1	2	4	1024	R	8	1	0.5	0	o	1	Plants wrap around creatures become entangled										
+24	Expeditious_Retreat	8	1	1	10	-1	0	1	2	0	131072	BW	0	3	1	0	d	6	Increase your speed by 30ft										
+25	Longstrider	8	1	1	600	-1	0	1	2	3	131072	R	0	3	1	0	d	2	Increase your speed by 10ft										
+26	Inflict_Light_Wounds	7	1	1	0	1	1	1	2	0	8	C	0	2	0.5	0	o	1	Touch deals 1d8+1/level (max+5)										
+27	Magic_Weapon	8	1	1	10	1	0	1	2	4	81920	CW	0	3	1	0	d	1	Weapon gains +1 bonus										
+28	Remove_Fear	1	1	1	100	5	0	1	2	0	-8	C	0	3	1	0	d	4	Suppress fear or give +4 on saves against fear, 1subject+1/4levels										
+29	Shield_of_Faith	1	1	1	10	1	0	1	2	3	32768	C	0	3	1	0	d	2	Aura grants +2 or higher deflection bonus										
+30	Shield	1	1	1	10	-1	0	1	2	0	32768	W	0	3	1	0	d	4	Invisible disc gives +4to AC, blocks missiles										
+31	Mage_Armour	2	1	1	600	1	0	1	2	4	32768	W	0	3	1	0	d	4	Gives +4 AC										
+32	Sleep	4	1	2	10	20	0	1	2	3	4096	BW	2	2	0	0	o	1	Puts 4 HD of creatures into magical slumber.										
+33	Magic_Missile	5	1	1	0	20	1	1	2	0	4	W	3	3	1	0	o	1	Missile of energy dart from your fingertips dealing 1d4+1 dmg.										
+34	Shocking_Grasp	5	1	1	0	1	1	1	2	0	6	W	0	3	1	1	o	1	Touch delivers 1/d6/level (max 5d6) electric dmg										
+35	Hynotism	4	1	2	4	5	0	1	2	0	2048	BW	6	2	0	0	o	1	Fascinate creature to stop										
+36	Cure_light_Wounds	2	2	1	0	1	2	1	2	0	8	R	0	3	1	0	d	1	Cures a living creature										

@@ -1,0 +1,13 @@
+1 Kobold 4 0.25 1 15 1 6 1 -1 s 1 9 1 2 1 -1 7 12 6 None 0 3 0 0 0
+2 Centipede 2 0.25 2 14 3 4 1 -3 s 1 5 0.5 2 2 0 1 13 6 poison 10 0 3 2 0
+3 Spider 2 0.25 3 15 5 3 1 -4 t 1 16 0.5 2 3 0 1 15 4 poison 10 0 5 2 0
+4 Scorpion 4 0.25 0 14 2 2 1 -4 t 1 16 0.5 4 0 0 1 12 4 poison 12 0 -3 1 2
+5 Dire_Rat 5 0.33 3 15 4 4 1 0 s 1 5 1 3 5 3 0 14 8 poison 11 0 4 2 0
+6 Goblin 5 0.33 1 15 2 6 1 0 s 1 9 1 3 1 -1 3 12 6 None 0 3 0 0 0
+7 Skeleton_Human 6 0.33 5 15 1 6 1 1 m 1 4 1 0 1 2 2 11 6 None 0 3 0 0 0
+8 Viper_snake 1 0.33 3 17 5 1 1 0 t 1 1 0.25 2 5 1 0 15 3 poison 10 0 5 3 0
+9 Hobgoblin 6 0.5 1 15 2 8 1 1 m 1 9 1 4 1 -1 3 11 6 None 0 3 0 0 0
+10 Centipede 4 0.5 2 14 1 3 1 -1 m 1 5 1 2 2 0 1 12 8 poison 10 0 2 3 0
+11 Spider 11 1 3 14 4 6 1 0 m 1 2 1 2 3 0 1 14 6 poison 10 0 4 3 0
+12 Vargouille 5 1 1 12 3 4 1 0 s 1 1 1 3 3 3 9 12 6 shriek 12 0 10 8 1
+13 Zombie_bugbear 42 2 0 16 6 8 1 3 m 1 1 6 2 2 5 2 10 6 None 0 3 0 0 0

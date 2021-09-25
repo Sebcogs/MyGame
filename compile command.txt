@@ -1,0 +1,2 @@
+g++ -std=c++11 -Wall Ability.cpp Actor.cpp inventory/Armor.cpp caste.cpp charClass.cpp Command.cpp CommandMap.cpp CommandWord.h Condition.cpp inventory/Consumable.cpp inventory/Container.cpp Dice.cpp Encounter.cpp inventory/Equip.cpp functions.cpp GameMain.cpp GameMap.cpp Hero.cpp inventory/Inventory.cpp inventory/Item.cpp magic.cpp Monster.cpp Parser.cpp Party.cpp inventory/Potion.cpp Race.cpp Room.cpp RoomDisplay.cpp inventory/Thrown.cpp spell.cpp SpecialAtk.cpp Stats.h inventory/Weapon.cpp -o game.exe
+
